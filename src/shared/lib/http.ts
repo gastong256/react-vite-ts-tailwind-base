@@ -103,6 +103,12 @@ httpClient.interceptors.response.use(
 
     if (!originalRequest) return Promise.reject(error)
 
+    // Auth endpoints return 401 for "wrong credentials" or "expired refresh token" —
+    // not for "access token expired". Skip the refresh flow and let the error
+    // propagate directly to the caller (e.g. LoginForm's onError handler).
+    const isAuthEndpoint = /\/auth\/(login|refresh)/.test(originalRequest.url ?? '')
+    if (isAuthEndpoint) return Promise.reject(error)
+
     // Only handle 401 Unauthorized — not already-retried requests
     if (error.response?.status !== 401 || originalRequest._retry === true) {
       logger.warn({
