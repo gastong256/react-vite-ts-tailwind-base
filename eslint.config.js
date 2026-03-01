@@ -66,6 +66,17 @@ export default tseslint.config(
     },
   },
 
+  // E2E test files — disable React rules (Playwright's `use` fixture param
+  // triggers react-hooks/rules-of-hooks false positives)
+  {
+    files: ['e2e/**/*.{ts,tsx}'],
+    rules: {
+      'react-hooks/rules-of-hooks': 'off',
+      'react-hooks/exhaustive-deps': 'off',
+      'react-refresh/only-export-components': 'off',
+    },
+  },
+
   // Node.js config files
   {
     files: ['**/*.{js,cjs,mjs}', 'playwright.config.ts', 'vite.config.ts'],
