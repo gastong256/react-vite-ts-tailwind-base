@@ -161,7 +161,7 @@ httpClient.interceptors.response.use(
       processQueue(refreshError, null)
       _tokenProvider?.logout()
       window.location.href = '/login'
-      return Promise.reject(refreshError)
+      return Promise.reject(refreshError instanceof Error ? refreshError : new Error(String(refreshError)))
     } finally {
       isRefreshing = false
     }

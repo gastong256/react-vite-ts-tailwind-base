@@ -2,8 +2,8 @@ import { lazy, Suspense } from 'react'
 import type { ReactNode } from 'react'
 import { createBrowserRouter } from 'react-router'
 import { Layout } from '@/app/components/Layout'
+import { PageLoader } from '@/app/components/PageLoader'
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute'
-import { Spinner } from '@/shared/ui/Spinner'
 
 // ── Lazy-loaded pages — enables code splitting per route ──────────────────────
 
@@ -28,14 +28,6 @@ const NotFoundPage = lazy(() =>
 )
 
 // ── Page wrapper with Suspense ────────────────────────────────────────────────
-
-function PageLoader() {
-  return (
-    <div className="flex min-h-[50vh] items-center justify-center">
-      <Spinner className="size-8 text-blue-600" label="Loading page…" />
-    </div>
-  )
-}
 
 function page(element: ReactNode) {
   return <Suspense fallback={<PageLoader />}>{element}</Suspense>
