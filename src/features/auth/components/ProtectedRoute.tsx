@@ -10,10 +10,15 @@ import { useAuthStore } from '@/features/auth/store/auth.store'
  *   { element: <ProtectedRoute />, children: [...] }
  */
 export function ProtectedRoute() {
-  const { accessToken } = useAuthStore()
+  const { accessToken, refreshToken } = useAuthStore()
   const location = useLocation()
 
-  if (!accessToken) {
+  // Allow through if either token is present: accessToken is memory-only and
+  // cleared on page reload, but refreshToken is persisted. On first API call
+  // from a protected page the 401 interceptor will transparently refresh.
+  const isAuthenticated = Boolean(accessToken ?? refreshToken)
+
+  if (!isAuthenticated) {
     const returnTo = encodeURIComponent(location.pathname + location.search)
     return <Navigate to={`/login?returnTo=${returnTo}`} replace />
   }

@@ -4,17 +4,20 @@ import { LoginForm } from '@/features/auth/components/LoginForm'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 
 export function LoginPage() {
-  const { accessToken } = useAuthStore()
+  const { accessToken, refreshToken } = useAuthStore()
   const navigate = useNavigate()
+  const isAuthenticated = Boolean(accessToken ?? refreshToken)
 
-  // Redirect already-authenticated users away from the login page
+  // Redirect already-authenticated users away from the login page.
+  // Check refreshToken too: accessToken is memory-only and lost on page reload,
+  // but refreshToken is persisted in localStorage.
   useEffect(() => {
-    if (accessToken) {
+    if (isAuthenticated) {
       void navigate('/', { replace: true })
     }
-  }, [accessToken, navigate])
+  }, [isAuthenticated, navigate])
 
-  if (accessToken) return null
+  if (isAuthenticated) return null
 
   return (
     <div className="flex min-h-[70vh] items-center justify-center px-4">
