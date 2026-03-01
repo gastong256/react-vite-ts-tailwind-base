@@ -94,12 +94,13 @@ describe('useLogin', () => {
     const { Wrapper } = makeWrapper()
     const { result } = renderHook(() => useLogin(), { wrapper: Wrapper })
 
-    act(() => {
-      result.current.mutate({ email: 'user@example.com', password: 'password' })
-    })
+    // Call mutate without act() so the pending state is observable via waitFor
+    // (act() flushes the full promise cycle immediately, skipping the pending state)
+    result.current.mutate({ email: 'user@example.com', password: 'password' })
 
-    // isPending should be true immediately after mutate is called
-    expect(result.current.isPending).toBe(true)
+    await waitFor(() => {
+      expect(result.current.isPending).toBe(true)
+    })
 
     await waitFor(() => {
       expect(result.current.isPending).toBe(false)

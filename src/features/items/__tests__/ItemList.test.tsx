@@ -72,10 +72,10 @@ describe('ItemList', () => {
   })
 
   it('does not render a description element when description is empty', () => {
-    render(<ItemList items={[MOCK_ITEMS[1]]} isLoading={false} error={null} />)
+    const { container } = render(<ItemList items={[MOCK_ITEMS[1]]} isLoading={false} error={null} />)
 
-    // The second item has an empty description — should not be rendered
-    expect(screen.queryByText('')).not.toBeInTheDocument()
+    // ItemCard renders description in a <p> only when truthy — verify none exists
+    expect(container.querySelector('article p')).toBeNull()
   })
 
   it('renders a unique key for each item (no duplicate content)', () => {
