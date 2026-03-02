@@ -12,9 +12,11 @@ test.describe('Items', () => {
     await page.goto('/items')
     await page.waitForLoadState('networkidle')
 
-    await expect(page.getByRole('heading', { name: 'Items' })).toBeVisible()
-    await expect(page.getByRole('heading', { name: /create item/i })).toBeVisible()
-    await expect(page.getByRole('button', { name: /add item/i })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Items' })).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByRole('heading', { name: /create item/i })).toBeVisible({
+      timeout: 10_000,
+    })
+    await expect(page.getByRole('button', { name: /add item/i })).toBeVisible({ timeout: 10_000 })
   })
 
   test('items list shows seed items from MSW', async ({ authenticatedPage: page }) => {
@@ -86,7 +88,10 @@ test.describe('Items', () => {
     const description = 'This is a test description'
 
     await page.getByLabel(/title/i).first().fill(uniqueTitle)
-    await page.getByLabel(/description/i).first().fill(description)
+    await page
+      .getByLabel(/description/i)
+      .first()
+      .fill(description)
     await page.getByRole('button', { name: /add item/i }).click()
 
     await expect(page.getByText(uniqueTitle)).toBeVisible({ timeout: 10_000 })

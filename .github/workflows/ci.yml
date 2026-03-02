@@ -28,9 +28,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-          # cache: pnpm is intentionally omitted — it requires pnpm-lock.yaml,
-          # which does not exist in a fresh template clone.
-          # We cache the pnpm store manually below using package.json as the key.
 
       - name: Get pnpm store path
         id: pnpm-cache
@@ -40,7 +37,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
@@ -60,14 +57,7 @@ jobs:
           fi
 
       - name: Install dependencies
-        # Use --frozen-lockfile only when a lockfile already exists
-        # (initialized projects). Fresh template clones have none.
-        run: |
-          if [ -f "pnpm-lock.yaml" ]; then
-            pnpm install --frozen-lockfile
-          else
-            pnpm install
-          fi
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm lint
