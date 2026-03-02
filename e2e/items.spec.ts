@@ -12,7 +12,9 @@ test.describe('Items', () => {
     await page.goto('/items')
     await page.waitForLoadState('networkidle')
 
-    await expect(page.getByRole('heading', { name: 'Items' })).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByRole('heading', { name: 'Items', exact: true })).toBeVisible({
+      timeout: 10_000,
+    })
     await expect(page.getByRole('heading', { name: /create item/i })).toBeVisible({
       timeout: 10_000,
     })
