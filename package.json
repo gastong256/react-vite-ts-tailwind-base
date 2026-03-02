@@ -1,6 +1,6 @@
 {
   "name": "__PROJECT_SLUG__",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "__DESCRIPTION__",
   "private": true,
   "type": "module",
@@ -82,7 +82,9 @@
     }
   },
   "msw": {
-    "workerDirectory": ["public"]
+    "workerDirectory": [
+      "public"
+    ]
   },
   "engines": {
     "node": ">=20.0.0",
